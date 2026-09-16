@@ -1,0 +1,5 @@
+build/
+applications/*/cv.aux
+*.log
+*.out
+compile.log
