@@ -1,0 +1,20 @@
+name: Alex Nowak
+title: Senior Platform Engineer — Cloud Infrastructure / CI-CD / Developer Productivity
+# contact intentionally omitted — this fixture must fail schema validation
+summary: >-
+  Senior engineer with 7+ years at Northwind Systems enabling product teams to deploy, run and
+  optimise applications on secure, scalable infrastructure.
+skills:
+  cloud_infrastructure:
+    - AWS
+    - Kubernetes
+experience:
+  - company: Northwind Systems
+    role: Tech Lead / DevProd Specialist / Senior Software Engineer
+    dates: Mar 2018 – Present
+    bullets:
+      - Owned CI reliability across the Data Center CI fleet, raising CI success rate from 84% to 93%.
+education:
+  - degree: M.Sc. in Informatics
+    school: Riverbend University
+    dates: 2016 – 2017

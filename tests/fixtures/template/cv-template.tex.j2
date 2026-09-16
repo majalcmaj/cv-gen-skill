@@ -1,0 +1,33 @@
+\documentclass[{{ font }}]{cv}
+
+\begin{document}
+
+\cvheader
+  {{ '{' }}{{ name }}{{ '}' }}
+  {{ '{' }}{{ title }}{{ '}' }}
+  {{ '{' }}{{ contact.phone }}\\ {{ contact.email }}\\ {{ contact.github }}\\ {{ contact.linkedin }}{{ '}' }}
+
+\section*{Summary}
+{{ summary }}
+
+\section*{Education}
+{% for edu in education %}
+\eduentry{ {{- edu.degree -}} }{ {{- edu.school -}} }{ {{- edu.dates -}} }
+{% endfor %}
+
+\section*{Professional Experience}
+{% for job in experience %}
+\jobheader{ {{- job.role -}} }{ {{- job.company -}} }{ {{- job.dates -}} }
+\begin{itemize}
+{% for bullet in job.bullets %}
+  \item {{ bullet }}
+{% endfor %}
+\end{itemize}
+{% if not loop.last %}
+\vspace{5pt}
+{% endif %}
+{% endfor %}
+
+\keywordsline{ {{- skills.values() | sum(start=[]) | join(' \\textperiodcentered\\ ') -}} }
+
+\end{document}

@@ -25,3 +25,43 @@ mkdir -p build
 bash scripts/run.sh touch build/probe
 test "$(stat -c %u build/probe)" = "$(id -u)"
 echo "[ok] run.sh deps + uid"
+
+echo "[selftest] check_facts.py / lint_prompt.py"
+bash scripts/run.sh python /skill/scripts/check_facts.py tests/fixtures/facts.md
+bash scripts/run.sh python /skill/scripts/lint_prompt.py /skill/prompt.md
+echo "[ok] check_facts.py / lint_prompt.py"
+
+echo "[selftest] render.sh pipeline"
+FONTS="lato montserrat raleway inter firasans sourcesans helvet"
+render_tmp="$(mktemp -d)"
+trap 'rm -rf "$render_tmp"' EXIT
+cp -r tests/fixtures/template "$render_tmp/template"
+(
+  cd "$render_tmp"
+
+  mkdir -p out
+  cp "$SKILL_DIR/tests/fixtures/sample-content.yaml" out/content.yaml
+  bash "$SKILL_DIR/scripts/render.sh" out/
+  bash "$SKILL_DIR/scripts/run.sh" python -c 'import pypdf, sys; sys.exit(len(pypdf.PdfReader("out/cv.pdf").pages) != 1)'
+
+  mkdir -p out-invalid
+  cp "$SKILL_DIR/tests/fixtures/sample-content-invalid.yaml" out-invalid/content.yaml
+  if bash "$SKILL_DIR/scripts/render.sh" out-invalid/ 2>err.log; then
+    echo "[selftest] expected sample-content-invalid.yaml to fail validation" >&2
+    exit 1
+  fi
+  grep -q 'contact' err.log || { echo "[selftest] invalid-fixture error missing a contact.* path" >&2; cat err.log >&2; exit 1; }
+
+  for font in $FONTS; do
+    mkdir -p "out-$font"
+    cp "$SKILL_DIR/tests/fixtures/sample-content.yaml" "out-$font/content.yaml"
+    bash "$SKILL_DIR/scripts/render.sh" "out-$font/" --font "$font"
+    bash "$SKILL_DIR/scripts/run.sh" python -c "import pypdf, sys; sys.exit(len(pypdf.PdfReader('out-$font/cv.pdf').pages) != 1)"
+    bash "$SKILL_DIR/scripts/run.sh" python -c "
+import pypdf
+text = ''.join(p.extract_text() for p in pypdf.PdfReader('out-$font/cv.pdf').pages)
+assert 'engineering-metrics pipelines' in text, 'keyword missing for font $font'
+"
+  done
+)
+echo "[ok] render.sh pipeline"
