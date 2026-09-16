@@ -113,3 +113,24 @@ fetch_tmp="$(mktemp -d)"
 )
 rm -rf "$fetch_tmp"
 echo "[ok] fetch_offer.sh"
+
+echo "[selftest] SKILL.md / README.md completeness"
+for f in scripts/*.sh; do
+  base="$(basename "$f")"
+  case "$base" in
+    lib.sh | selftest.sh | build_image.sh) continue ;;
+  esac
+  grep -q "$base" SKILL.md \
+    || { echo "[selftest] SKILL.md missing mention of $base" >&2; exit 1; }
+done
+for needle in 'prompt.md' 'schema/content.schema.json' 'facts.md' 'content.yaml' 'cv.pdf'; do
+  grep -qF "$needle" SKILL.md \
+    || { echo "[selftest] SKILL.md missing mention of '$needle'" >&2; exit 1; }
+done
+grep -qE 'applications/[^ ]*offer\.md' SKILL.md \
+  || { echo "[selftest] SKILL.md missing mention of applications/<slug>/offer.md" >&2; exit 1; }
+grep -q '^## Install' README.md \
+  || { echo "[selftest] README.md missing '## Install' heading" >&2; exit 1; }
+grep -q '^## Prerequisites' README.md \
+  || { echo "[selftest] README.md missing '## Prerequisites' heading" >&2; exit 1; }
+echo "[ok] SKILL.md / README.md completeness"
