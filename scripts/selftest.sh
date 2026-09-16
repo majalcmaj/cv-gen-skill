@@ -18,3 +18,10 @@ test "$name_line" = "$(basename "$SKILL_DIR")" \
 grep -q '^description: .\+' SKILL.md \
   || { echo "[selftest] SKILL.md missing description" >&2; exit 1; }
 echo "[ok] SKILL.md frontmatter valid"
+
+echo "[selftest] run.sh deps + uid"
+bash scripts/run.sh python -c 'import jinja2, yaml, jsonschema, pypdf, requests, trafilatura; import shutil; assert shutil.which("pdflatex")'
+mkdir -p build
+bash scripts/run.sh touch build/probe
+test "$(stat -c %u build/probe)" = "$(id -u)"
+echo "[ok] run.sh deps + uid"

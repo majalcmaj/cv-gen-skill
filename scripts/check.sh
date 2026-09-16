@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+
 status=0
 
 check_bash() {
@@ -30,8 +32,21 @@ check_docker_daemon() {
   fi
 }
 
+check_image() {
+  if ! command -v docker >/dev/null 2>&1 || ! docker info >/dev/null 2>&1; then
+    return
+  fi
+  local tag; tag="$(image_tag)"
+  if docker image inspect "$tag" >/dev/null 2>&1; then
+    echo "[ok] image $tag present"
+  else
+    echo "[info] image not built — scripts/build_image.sh (or first render builds it, ~5 min)"
+  fi
+}
+
 check_bash
 check_docker_cli
 check_docker_daemon
+check_image
 
 exit "$status"
