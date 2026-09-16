@@ -86,3 +86,30 @@ init_tmp="$(mktemp -d)"
 )
 rm -rf "$init_tmp"
 echo "[ok] init.sh"
+
+echo "[selftest] fetch_offer.sh"
+fetch_tmp="$(mktemp -d)"
+(
+  cd "$fetch_tmp"
+  cp "$SKILL_DIR"/tests/fixtures/offer.html "$SKILL_DIR"/tests/fixtures/offer.txt \
+     "$SKILL_DIR"/tests/fixtures/empty.html .
+
+  bash "$SKILL_DIR/scripts/fetch_offer.sh" t1 offer.html
+  grep -q 'Senior Backend Engineer' applications/t1/offer.md \
+    || { echo "[selftest] fetch_offer t1: missing posting text" >&2; exit 1; }
+  grep -q 'Sitemap' applications/t1/offer.md \
+    && { echo "[selftest] fetch_offer t1: nav/footer boilerplate leaked into offer.md" >&2; exit 1; }
+
+  bash "$SKILL_DIR/scripts/fetch_offer.sh" t2 offer.txt
+  cmp -s applications/t2/offer.md offer.txt \
+    || { echo "[selftest] fetch_offer t2: not byte-identical" >&2; exit 1; }
+
+  if bash "$SKILL_DIR/scripts/fetch_offer.sh" t3 empty.html 2>err.log; then
+    echo "[selftest] fetch_offer t3: expected exit 2 for empty.html" >&2
+    exit 1
+  fi
+  grep -qi 'too little text' err.log \
+    || { echo "[selftest] fetch_offer t3: missing 'too little text' message" >&2; cat err.log >&2; exit 1; }
+)
+rm -rf "$fetch_tmp"
+echo "[ok] fetch_offer.sh"

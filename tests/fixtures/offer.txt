@@ -1,0 +1,9 @@
+Senior Data Engineer — Analytics Platform
+
+We are hiring a Senior Data Engineer to build and operate the pipelines that power our
+analytics platform, working with petabyte-scale data across streaming and batch systems.
+
+Required:
+- 4+ years building production data pipelines (Spark, Airflow, or similar)
+- Strong SQL and data modeling skills
+- Experience with cloud data warehouses (BigQuery, Snowflake, or Redshift)
