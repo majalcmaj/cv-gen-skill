@@ -26,10 +26,28 @@ bash scripts/run.sh touch build/probe
 test "$(stat -c %u build/probe)" = "$(id -u)"
 echo "[ok] run.sh deps + uid"
 
-echo "[selftest] check_facts.py / lint_prompt.py"
-bash scripts/run.sh python /skill/scripts/check_facts.py assets/facts.md
+echo "[selftest] validate_facts.py"
+validate_facts() { bash scripts/run.sh python /skill/scripts/validate_facts.py "$@"; }
+validate_facts tests/fixtures/facts-starter.yaml
+validate_facts tests/fixtures/facts-complete.yaml
+validate_facts tests/fixtures/facts-complete.yaml --strict
+if validate_facts tests/fixtures/facts-starter.yaml --strict >build/strict.log 2>&1; then
+  echo "[selftest] validate_facts: expected starter to fail --strict" >&2; exit 1
+fi
+grep -q '<FILL>' build/strict.log || { echo "[selftest] validate_facts: --strict error missing <FILL>" >&2; cat build/strict.log >&2; exit 1; }
+if validate_facts tests/fixtures/facts-invalid.yaml >build/invalid.log 2>&1; then
+  echo "[selftest] validate_facts: expected facts-invalid.yaml to fail" >&2; exit 1
+fi
+for needle in "matches no positions" "'impact' is a required" 2018-3 foo; do
+  grep -q "$needle" build/invalid.log \
+    || { echo "[selftest] validate_facts: invalid-fixture error missing '$needle'" >&2; cat build/invalid.log >&2; exit 1; }
+done
+rm -f build/strict.log build/invalid.log
+echo "[ok] validate_facts.py"
+
+echo "[selftest] lint_prompt.py"
 bash scripts/run.sh python /skill/scripts/lint_prompt.py /skill/prompt.md
-echo "[ok] check_facts.py / lint_prompt.py"
+echo "[ok] lint_prompt.py"
 
 echo "[selftest] render.sh pipeline"
 FONTS="lato montserrat raleway inter firasans sourcesans helvet"
@@ -71,18 +89,18 @@ init_tmp="$(mktemp -d)"
 (
   cd "$init_tmp"
   bash "$SKILL_DIR/scripts/init.sh"
-  for f in template/cv.cls template/cv-template.tex.j2 facts.md \
+  for f in template/cv.cls template/cv-template.tex.j2 facts.yaml \
            applications/example-co/offer.md applications/example-co/content.yaml .gitignore; do
     test -e "$f" || { echo "[selftest] init.sh: missing $f" >&2; exit 1; }
   done
-  bash "$SKILL_DIR/scripts/run.sh" python /skill/scripts/check_facts.py facts.md
+  bash "$SKILL_DIR/scripts/run.sh" python /skill/scripts/validate_facts.py facts.yaml
   bash "$SKILL_DIR/scripts/render.sh" applications/example-co
   bash "$SKILL_DIR/scripts/run.sh" python -c \
     'import pypdf, sys; sys.exit(len(pypdf.PdfReader("applications/example-co/cv.pdf").pages) != 1)'
 
-  echo x >facts.md
+  echo x >facts.yaml
   bash "$SKILL_DIR/scripts/init.sh"
-  test "$(cat facts.md)" = x || { echo "[selftest] init.sh: facts.md overwritten (not idempotent)" >&2; exit 1; }
+  test "$(cat facts.yaml)" = x || { echo "[selftest] init.sh: facts.yaml overwritten (not idempotent)" >&2; exit 1; }
 )
 rm -rf "$init_tmp"
 echo "[ok] init.sh"

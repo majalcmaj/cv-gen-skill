@@ -1,0 +1,26 @@
+name: Alex Nowak
+contact:
+  phone: "+1 555 010 2024"
+  email: alex.nowak@example.com
+  github: https://github.com/alexnowak-example
+  linkedin: www.linkedin.com/in/alexnowak-example
+foo: unknown key
+experience:
+  - employer: Northwind Systems
+    status: complete
+    positions:
+      - title: Senior Software Engineer
+        start: 2018-3
+        end: 2021-12
+    accomplishments:
+      - title: CI reliability
+        position: Staff Engineer
+        situation: Broken builds everywhere.
+        behavior: Built cleanup automation.
+education:
+  - degree: M.Sc. in Informatics
+    school: Riverbend University
+    start: 2016-10
+    end: 2017-09
+skills:
+  CI/CD: [Bamboo]

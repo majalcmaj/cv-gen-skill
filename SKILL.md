@@ -35,8 +35,9 @@ skill's own directory; `facts.md`/`applications/` paths are relative to the user
    JS-rendered or blocked page), fall back to your own web-fetch tool; if that also fails, ask
    the user to paste the offer text. Never proceed to step 3 without real offer text.
 
-3. **Draft `content.yaml`.** Run `bash scripts/run.sh python /skill/scripts/check_facts.py
-   facts.md` to confirm `facts.md` has the required structure. Then read `facts.md`,
+3. **Draft `content.yaml`.** Run `bash scripts/run.sh python /skill/scripts/validate_facts.py
+   facts.yaml` to confirm `facts.yaml` has the required structure. Then read `facts.yaml` (the
+   fact base; `facts.md` is the legacy name),
    `prompt.md`, `schema/content.schema.json` and the saved `offer.md`, and follow `prompt.md`'s
    rules exactly — it is the complete spec for this step, don't restate or reinterpret it here.
    Write the result verbatim to `applications/<company-slug>/content.yaml`.

@@ -1,0 +1,93 @@
+name: Alex Nowak
+contact:
+  phone: "+1 555 010 2024"
+  email: alex.nowak@example.com
+  github: https://github.com/alexnowak-example
+  linkedin: www.linkedin.com/in/alexnowak-example
+
+summary: >-
+  Senior engineer with 7+ years at Northwind Systems enabling product teams to deploy, run and
+  optimise applications on secure, scalable infrastructure.
+
+experience:
+  - employer: Northwind Systems
+    location: Berlin / remote
+    context: B2B SaaS, ~400 engineers; internal platform and developer-productivity org.
+    status: complete
+    positions:
+      - title: Tech Lead
+        start: 2022-01
+        end: present
+      - title: Senior Software Engineer
+        start: 2018-03
+        end: 2021-12
+    accomplishments:
+      - title: CI reliability on the Data Center fleet
+        position: Senior Software Engineer
+        situation: Broken builds on the Data Center CI fleet were handled by ad-hoc firefighting.
+        behavior: Built repeatable detection and cleanup automation for the CI fleet.
+        impact: Raised CI success rate from 84% to 93%.
+        metrics:
+          - {name: CI success rate, before: "84%", after: "93%"}
+        confidence: confirmed
+        keywords: [Bamboo, CI reliability, automation]
+      - title: Lead Time for Changes org-wide
+        position: Tech Lead
+        situation: No org-wide delivery metric existed.
+        behavior: Defined and owned "Lead Time for Changes"; built automated measurement pipelines and dashboards.
+        impact: Drove P80 lead time down 70% (48.0d -> 14.4d).
+        metrics:
+          - {name: P80 lead time for changes, before: 48.0d, after: 14.4d}
+        confidence: confirmed
+        keywords: [engineering metrics, dashboards, DORA]
+
+  - employer: Fictive Labs
+    context: Side project / consulting for a service-management platform.
+    status: complete
+    positions:
+      - title: Fullstack Developer / DevOps Engineer
+        start: 2016-06
+        end: 2024-06
+    accomplishments:
+      - title: CI/CD and monitoring for a service-management platform
+        position: Fullstack Developer / DevOps Engineer
+        situation: Platform had no automated delivery or monitoring.
+        behavior: Built CI/CD pipelines (Jenkins, GitLab) and Prometheus/ELK monitoring and logging.
+        impact: Deployments went from manual to 3 automated releases per week.
+        confidence: confirmed
+        keywords: [Jenkins, GitLab CI, Prometheus, ELK]
+
+education:
+  - degree: M.Sc. in Informatics
+    school: Riverbend University
+    start: 2016-10
+    end: 2017-09
+  - degree: B.Sc. in Informatics
+    school: Riverbend University
+    start: 2012-10
+    end: 2016-07
+
+skills:
+  Cloud/infra: [AWS, Kubernetes, Docker, Linux, infrastructure-as-code]
+  CI/CD: [Bamboo, Bitbucket Pipelines, GitHub Actions, Jenkins, GitLab CI]
+  Observability: [Prometheus, ELK, engineering-metrics pipelines]
+
+projects:
+  - name: k8s-cost-report
+    dates: "2023"
+    description: Open-source CLI that attributes Kubernetes spend per namespace.
+    impact: 300+ GitHub stars; adopted by 2 internal teams.
+    keywords: [Go, Kubernetes]
+
+certifications:
+  - name: Certified Kubernetes Administrator (CKA)
+    issuer: CNCF
+    date: 2021-05
+
+languages:
+  - language: English
+    level: C1
+  - language: Polish
+    level: native
+
+open_questions: []

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cv-gen-flow/schema/facts.schema.json",
+  "title": "facts.yaml",
+  "description": "Canonical fact base: employers with positions and SBI accomplishments, plus education, skills and optional extras. The tailoring step only selects from here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "contact", "experience", "education", "skills"],
+  "$defs": {
+    "nonEmpty": { "type": "string", "minLength": 1 },
+    "month": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$" },
+    "monthOrPresent": { "type": "string", "pattern": "^([0-9]{4}-(0[1-9]|1[0-2])|present)$" },
+    "value": { "type": ["string", "number"] },
+    "stringList": { "type": "array", "items": { "$ref": "#/$defs/nonEmpty" } },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "start", "end"],
+      "properties": {
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "start": { "$ref": "#/$defs/month" },
+        "end": { "$ref": "#/$defs/monthOrPresent" }
+      }
+    },
+    "metric": {
+      "oneOf": [
+        { "$ref": "#/$defs/nonEmpty" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "name": { "$ref": "#/$defs/nonEmpty" },
+            "before": { "$ref": "#/$defs/value" },
+            "after": { "$ref": "#/$defs/value" },
+            "unit": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "accomplishment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "position", "situation", "behavior", "impact"],
+      "properties": {
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "position": { "$ref": "#/$defs/nonEmpty" },
+        "situation": { "$ref": "#/$defs/nonEmpty" },
+        "behavior": { "$ref": "#/$defs/nonEmpty" },
+        "impact": { "$ref": "#/$defs/nonEmpty" },
+        "metrics": { "type": "array", "items": { "$ref": "#/$defs/metric" } },
+        "confidence": { "enum": ["confirmed", "estimated", "unverified"] },
+        "keywords": { "$ref": "#/$defs/stringList" },
+        "todo": { "type": "string" }
+      }
+    },
+    "employer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["employer", "status", "positions", "accomplishments"],
+      "properties": {
+        "employer": { "$ref": "#/$defs/nonEmpty" },
+        "location": { "type": "string" },
+        "context": { "type": "string" },
+        "status": { "enum": ["draft", "complete"] },
+        "positions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/position" } },
+        "accomplishments": { "type": "array", "items": { "$ref": "#/$defs/accomplishment" } },
+        "todo": { "type": "string" }
+      }
+    },
+    "education": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["degree", "school", "start", "end"],
+      "properties": {
+        "degree": { "$ref": "#/$defs/nonEmpty" },
+        "school": { "$ref": "#/$defs/nonEmpty" },
+        "start": { "$ref": "#/$defs/month" },
+        "end": { "$ref": "#/$defs/monthOrPresent" },
+        "notes": { "type": "string" }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmpty" },
+        "dates": { "type": "string" },
+        "description": { "$ref": "#/$defs/nonEmpty" },
+        "impact": { "type": "string" },
+        "keywords": { "$ref": "#/$defs/stringList" }
+      }
+    },
+    "certification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmpty" },
+        "issuer": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    },
+    "language": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "level"],
+      "properties": {
+        "language": { "$ref": "#/$defs/nonEmpty" },
+        "level": { "$ref": "#/$defs/nonEmpty" }
+      }
+    }
+  },
+  "properties": {
+    "name": { "$ref": "#/$defs/nonEmpty" },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phone", "email", "github", "linkedin"],
+      "properties": {
+        "phone": { "$ref": "#/$defs/nonEmpty" },
+        "email": { "$ref": "#/$defs/nonEmpty" },
+        "github": { "$ref": "#/$defs/nonEmpty" },
+        "linkedin": { "$ref": "#/$defs/nonEmpty" }
+      }
+    },
+    "summary": { "type": "string" },
+    "experience": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/employer" } },
+    "education": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/education" } },
+    "skills": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmpty" } }
+    },
+    "projects": { "type": "array", "items": { "$ref": "#/$defs/project" } },
+    "certifications": { "type": "array", "items": { "$ref": "#/$defs/certification" } },
+    "languages": { "type": "array", "items": { "$ref": "#/$defs/language" } },
+    "open_questions": { "$ref": "#/$defs/stringList" }
+  }
+}

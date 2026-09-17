@@ -1,0 +1,98 @@
+# facts.yaml — your canonical fact base, the ONE source of truth for CV tailoring.
+# The generate step may only select, reorder, compress or rephrase what is here; it never
+# adds a fact, number, employer, date or skill that isn't written below.
+#
+# name/contact: fill by hand, replacing every <FILL> (the interview never touches them).
+# Everything else: run the skill's `facts` mode — an interview that fills/extends this file —
+# or edit by hand. Validate with `bash scripts/run.sh python /skill/scripts/validate_facts.py facts.yaml`.
+# Example content below is a fictional persona (Alex Nowak) — replace it with your own.
+
+name: <FILL>
+contact:
+  phone: <FILL>
+  email: <FILL>
+  github: <FILL>
+  linkedin: <FILL>
+
+summary: >-
+  Senior engineer with 7+ years at Northwind Systems enabling product teams to deploy, run and
+  optimise applications on secure, scalable infrastructure.
+
+experience:
+  - employer: Northwind Systems
+    location: Berlin / remote
+    context: B2B SaaS, ~400 engineers; internal platform and developer-productivity org.
+    status: complete
+    positions:
+      - title: Tech Lead
+        start: 2022-01
+        end: present
+      - title: Senior Software Engineer
+        start: 2018-03
+        end: 2021-12
+    accomplishments:
+      - title: Kubernetes fleet cost optimisation
+        position: Tech Lead
+        situation: 5+ product teams ran on a shared Kubernetes fleet with no cost visibility.
+        behavior: Delivered cost-optimisation and monitoring-plugin rollouts across the fleet.
+        impact: Cut infrastructure spend by ~USD 180K/quarter while improving observability for 5+ teams.
+        metrics:
+          - {name: infrastructure spend, after: "-180K USD/quarter"}
+        confidence: estimated
+        keywords: [Kubernetes, cost optimisation, observability]
+        todo: re-verify the 180K figure with finance after the Q3 re-platforming
+      - title: CI reliability on the Data Center fleet
+        position: Senior Software Engineer
+        situation: Broken builds on the Data Center CI fleet were handled by ad-hoc firefighting.
+        behavior: Built repeatable detection and cleanup automation for the CI fleet.
+        impact: Raised CI success rate from 84% to 93%.
+        metrics:
+          - {name: CI success rate, before: "84%", after: "93%"}
+        confidence: confirmed
+        keywords: [Bamboo, CI reliability, automation]
+      - title: Release-engineering lead time
+        position: Senior Software Engineer
+        situation: 7-person team; bugfix releases took ~20h of mostly manual steps.
+        behavior: Measured release phases and automated the manual ones.
+        impact: Cut bugfix release lead time 60% (20h -> 8h).
+        metrics:
+          - {name: bugfix release lead time, before: 20h, after: 8h}
+        confidence: confirmed
+        keywords: [release engineering, automation]
+      - title: Lead Time for Changes org-wide
+        position: Tech Lead
+        situation: No org-wide delivery metric existed.
+        behavior: Defined and owned "Lead Time for Changes"; built automated measurement pipelines and dashboards.
+        impact: Drove P80 lead time down 70% (48.0d -> 14.4d).
+        metrics:
+          - {name: P80 lead time for changes, before: 48.0d, after: 14.4d}
+        confidence: confirmed
+        keywords: [engineering metrics, dashboards, DORA]
+
+  - employer: Fictive Labs
+    context: Side project / consulting for a service-management platform.
+    status: draft
+    positions:
+      - title: Fullstack Developer / DevOps Engineer
+        start: 2016-06
+        end: 2024-06
+    accomplishments: []
+    todo: ask about CI/CD pipelines (Jenkins, GitLab), Prometheus/ELK monitoring, GDPR anonymisation tooling
+
+education:
+  - degree: M.Sc. in Informatics
+    school: Riverbend University
+    start: 2016-10
+    end: 2017-09
+  - degree: B.Sc. in Informatics
+    school: Riverbend University
+    start: 2012-10
+    end: 2016-07
+
+skills:
+  Cloud/infra: [AWS, Kubernetes, Docker, Linux, infrastructure-as-code]
+  CI/CD: [Bamboo, Bitbucket Pipelines, GitHub Actions, Jenkins, GitLab CI]
+  Observability: [Prometheus, ELK, engineering-metrics pipelines]
+
+open_questions:
+  - Is the "~USD 180K/quarter" savings figure still accurate after the Q3 re-platforming?
