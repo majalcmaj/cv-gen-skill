@@ -45,6 +45,27 @@ done
 rm -f build/strict.log build/invalid.log
 echo "[ok] validate_facts.py"
 
+echo "[selftest] facts_outline.py"
+facts_outline() { bash scripts/run.sh python /skill/scripts/facts_outline.py "$@"; }
+facts_outline tests/fixtures/facts-starter.yaml >build/outline.log
+for needle in '== outline ==' '== gaps ==' 'experience[0] Northwind Systems' '[draft]' \
+              'fill: name' 'no accomplishments' 'section empty: projects'; do
+  grep -qF "$needle" build/outline.log \
+    || { echo "[selftest] facts_outline starter: missing '$needle'" >&2; cat build/outline.log >&2; exit 1; }
+done
+facts_outline tests/fixtures/facts-complete.yaml >build/outline.log
+test "$(sed -n '/== gaps ==/,$p' build/outline.log | tail -n +2)" = "no gaps" \
+  || { echo "[selftest] facts_outline complete: expected exactly 'no gaps'" >&2; cat build/outline.log >&2; exit 1; }
+for needle in 'experience[0] Northwind Systems' 'experience[1] Fictive Labs' 'certifications:'; do
+  grep -qF "$needle" build/outline.log \
+    || { echo "[selftest] facts_outline complete: missing '$needle'" >&2; cat build/outline.log >&2; exit 1; }
+done
+if facts_outline tests/fixtures/facts-invalid.yaml >build/outline.log 2>&1; then
+  echo "[selftest] facts_outline: expected facts-invalid.yaml to exit 1" >&2; exit 1
+fi
+rm -f build/outline.log
+echo "[ok] facts_outline.py"
+
 echo "[selftest] lint_prompt.py"
 bash scripts/run.sh python /skill/scripts/lint_prompt.py /skill/prompt.md
 echo "[ok] lint_prompt.py"
