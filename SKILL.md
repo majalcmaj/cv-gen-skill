@@ -1,6 +1,6 @@
 ---
 name: cv-gen
-description: Generate a tailored, 1-page, ATS-friendly CV PDF from a canonical facts file and a job offer, entirely inside a local docker container (no host python/latex needed). Three modes — check (verify docker prereqs), init (copy starter template/facts/example into your project), and <company-slug> <offer-url-or-path> (render the tailored PDF).
+description: Generate a tailored, 1-page, ATS-friendly CV PDF from a canonical facts file and a job offer, entirely inside a local docker container (no host python/latex needed). Four modes — check (verify docker prereqs), init (copy starter template/facts.yaml/example into your project), facts [intent] (resumable SBI interview that fills or extends facts.yaml), and <company-slug> <offer-url-or-path> (render the tailored PDF).
 ---
 
 # cv-gen
@@ -19,6 +19,11 @@ skill's own directory; `facts.yaml`/`applications/` paths are relative to the us
 - **init** — `bash scripts/init.sh`: copies a deterministic starter (`template/`, `facts.yaml`,
   `applications/example-co/`, `.gitignore`) into the current directory. Never overwrites an
   existing file.
+- **facts** `[intent]` — interview mode: fills or extends `facts.yaml` one answer at a time.
+  Run `bash scripts/run.sh python /skill/scripts/facts_outline.py facts.yaml`, then follow
+  `interview.md` exactly — it is the complete spec (resume menu, SBI questions, write-validate
+  loop); don't restate or reinterpret it here. The optional free-text intent (`facts add cert`,
+  `facts extend Northwind`) skips the menu. Name/contact are the user's to fill by hand.
 - **generate `<company-slug>` `<offer-url-or-path>`** — runs the flow below to produce
   `applications/<company-slug>/cv.pdf`.
 

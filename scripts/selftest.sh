@@ -66,9 +66,10 @@ fi
 rm -f build/outline.log
 echo "[ok] facts_outline.py"
 
-echo "[selftest] lint_prompt.py"
+echo "[selftest] lint_prompt.py / lint_interview.py"
 bash scripts/run.sh python /skill/scripts/lint_prompt.py /skill/prompt.md
-echo "[ok] lint_prompt.py"
+bash scripts/run.sh python /skill/scripts/lint_interview.py /skill/interview.md
+echo "[ok] lint_prompt.py / lint_interview.py"
 
 echo "[selftest] render.sh pipeline"
 FONTS="lato montserrat raleway inter firasans sourcesans helvet"
@@ -162,7 +163,10 @@ for f in scripts/*.sh; do
   grep -q "$base" SKILL.md \
     || { echo "[selftest] SKILL.md missing mention of $base" >&2; exit 1; }
 done
-for needle in 'prompt.md' 'schema/content.schema.json' 'facts.yaml' 'validate_facts.py' 'content.yaml' 'cv.pdf'; do
+grep -q '^- \*\*facts\*\*' SKILL.md \
+  || { echo "[selftest] SKILL.md missing the '- **facts**' mode" >&2; exit 1; }
+for needle in 'prompt.md' 'interview.md' 'schema/content.schema.json' 'facts.yaml' 'validate_facts.py' \
+              'facts_outline.py' 'content.yaml' 'cv.pdf'; do
   grep -qF "$needle" SKILL.md \
     || { echo "[selftest] SKILL.md missing mention of '$needle'" >&2; exit 1; }
 done
