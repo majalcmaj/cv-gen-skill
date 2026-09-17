@@ -1,7 +1,7 @@
-<!-- plan-status: pending -->
+<!-- plan-status: done; commit=85d0cac; date=2026-09-17 -->
 # Phase 03 — generate-on-yaml
 
-> **Status:** ⬜ PENDING
+> **Status:** ✅ DONE — 85d0cac (2026-09-17)
 
 Read `docs/facts-interview/prompt.md` first.
 
