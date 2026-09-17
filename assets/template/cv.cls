@@ -24,7 +24,7 @@
 
 \RequirePackage[a4paper, margin=2cm]{geometry}
 \RequirePackage[T1]{fontenc}
-\RequirePackage[utf8]{inputenc} % facts.md/content.yaml carry names with diacritics (e.g. "Michał")
+\RequirePackage[utf8]{inputenc} % facts.yaml/content.yaml carry names with diacritics (e.g. "Michał")
 \cv@loadfont
 \renewcommand{\familydefault}{\sfdefault} % sans-serif default family
 \RequirePackage{xcolor}

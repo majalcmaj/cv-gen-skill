@@ -162,12 +162,15 @@ for f in scripts/*.sh; do
   grep -q "$base" SKILL.md \
     || { echo "[selftest] SKILL.md missing mention of $base" >&2; exit 1; }
 done
-for needle in 'prompt.md' 'schema/content.schema.json' 'facts.md' 'content.yaml' 'cv.pdf'; do
+for needle in 'prompt.md' 'schema/content.schema.json' 'facts.yaml' 'validate_facts.py' 'content.yaml' 'cv.pdf'; do
   grep -qF "$needle" SKILL.md \
     || { echo "[selftest] SKILL.md missing mention of '$needle'" >&2; exit 1; }
 done
 grep -qE 'applications/[^ ]*offer\.md' SKILL.md \
   || { echo "[selftest] SKILL.md missing mention of applications/<slug>/offer.md" >&2; exit 1; }
+if grep -rn 'facts\.md' --exclude-dir=docs --exclude-dir=.git --exclude-dir=build --exclude=lint_prompt.py . ; then
+  echo "[selftest] stale legacy fact-base name reference(s) above — the fact base is facts.yaml" >&2; exit 1
+fi
 grep -q '^## Install' README.md \
   || { echo "[selftest] README.md missing '## Install' heading" >&2; exit 1; }
 grep -q '^## Prerequisites' README.md \

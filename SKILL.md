@@ -5,10 +5,10 @@ description: Generate a tailored, 1-page, ATS-friendly CV PDF from a canonical f
 
 # cv-gen
 
-Turns a canonical fact base (`facts.md`) plus a job offer into a truthful, 1-page,
+Turns a canonical fact base (`facts.yaml`) plus a job offer into a truthful, 1-page,
 ATS-friendly CV PDF — without rewriting a CV from scratch for every application. Script
 paths below (`scripts/`, `prompt.md`, `schema/content.schema.json`) are relative to this
-skill's own directory; `facts.md`/`applications/` paths are relative to the user's project
+skill's own directory; `facts.yaml`/`applications/` paths are relative to the user's project
 (the current directory).
 
 ## Modes
@@ -16,7 +16,7 @@ skill's own directory; `facts.md`/`applications/` paths are relative to the user
 - **check** — `bash scripts/check.sh`: verifies host prerequisites (bash ≥ 4, docker CLI,
   reachable docker daemon) and reports the local image build status. No network, no side
   effects.
-- **init** — `bash scripts/init.sh`: copies a deterministic starter (`template/`, `facts.md`,
+- **init** — `bash scripts/init.sh`: copies a deterministic starter (`template/`, `facts.yaml`,
   `applications/example-co/`, `.gitignore`) into the current directory. Never overwrites an
   existing file.
 - **generate `<company-slug>` `<offer-url-or-path>`** — runs the flow below to produce
@@ -35,10 +35,14 @@ skill's own directory; `facts.md`/`applications/` paths are relative to the user
    JS-rendered or blocked page), fall back to your own web-fetch tool; if that also fails, ask
    the user to paste the offer text. Never proceed to step 3 without real offer text.
 
-3. **Draft `content.yaml`.** Run `bash scripts/run.sh python /skill/scripts/validate_facts.py
-   facts.yaml` to confirm `facts.yaml` has the required structure. Then read `facts.yaml` (the
-   fact base; `facts.md` is the legacy name),
-   `prompt.md`, `schema/content.schema.json` and the saved `offer.md`, and follow `prompt.md`'s
+3. **Draft `content.yaml`.** Run
+   ```
+   bash scripts/run.sh python /skill/scripts/validate_facts.py facts.yaml --strict
+   ```
+   If it reports `<FILL>` placeholders, tell the user which `name`/`contact` keys to fill by
+   hand and stop — never fill them yourself. Any other error: ask the user to fix `facts.yaml`.
+   Then read `facts.yaml`, `prompt.md`, `schema/content.schema.json` and the saved `offer.md`,
+   and follow `prompt.md`'s
    rules exactly — it is the complete spec for this step, don't restate or reinterpret it here.
    Write the result verbatim to `applications/<company-slug>/content.yaml`.
 

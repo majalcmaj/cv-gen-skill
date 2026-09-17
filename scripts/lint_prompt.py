@@ -38,11 +38,20 @@ def main() -> int:
     if not has_any(text, ["do not invent", "never invent", "never fabricate", "do not fabricate"]):
         errors.append(
             "missing a truthfulness clause (e.g. 'do not invent' / 'never fabricate') "
-            "forbidding new achievements/numbers not present in facts.md"
+            "forbidding new achievements/numbers not present in facts.yaml"
         )
 
     if "schema/content.schema.json" not in text:
         errors.append("missing a reference to schema/content.schema.json in the output contract")
+
+    if "facts.yaml" not in text or "facts.md" in text:
+        errors.append("must name facts.yaml (legacy markdown name not allowed) as the fact base")
+
+    if not all(has_any(text, [w]) for w in ["situation", "behavior", "impact"]):
+        errors.append("missing an SBI compression rule (situation / behavior / impact -> one bullet)")
+
+    if not has_any(text, ["unverified", "estimated"]):
+        errors.append("missing a confidence clause (how unverified/estimated accomplishments are handled)")
 
     if not has_any(text, ["only valid yaml", "yaml only", "raw yaml only", "only yaml"]):
         errors.append("missing an output-contract clause stating output is only valid YAML")

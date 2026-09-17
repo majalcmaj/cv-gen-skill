@@ -35,7 +35,7 @@ FONTS = ("lato", "montserrat", "raleway", "inter", "firasans", "sourcesans", "he
 DEFAULT_FONT = "inter"
 
 # Characters LaTeX treats specially; escape them in every user-supplied string
-# before it reaches the template so an offer/facts.md containing "&", "%",
+# before it reaches the template so an offer/facts.yaml containing "&", "%",
 # "_", "#", etc. doesn't break compilation or silently mis-render.
 _LATEX_SPECIAL = re.compile(r"([&%$#_{}~^\\])")
 _LATEX_REPLACEMENTS = {
