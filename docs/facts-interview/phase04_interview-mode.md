@@ -1,7 +1,7 @@
-<!-- plan-status: pending -->
+<!-- plan-status: done; commit=38b2cd6; date=2026-09-17 -->
 # Phase 04 — interview-mode
 
-> **Status:** ⬜ PENDING
+> **Status:** ✅ DONE — 38b2cd6 (2026-09-17)
 
 Read `docs/facts-interview/prompt.md` first.
 
