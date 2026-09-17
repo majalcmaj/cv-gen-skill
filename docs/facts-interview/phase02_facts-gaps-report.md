@@ -1,7 +1,7 @@
-<!-- plan-status: pending -->
+<!-- plan-status: done; commit=4684832; date=2026-09-17 -->
 # Phase 02 — facts-gaps-report
 
-> **Status:** ⬜ PENDING
+> **Status:** ✅ DONE — 4684832 (2026-09-17)
 
 Read `docs/facts-interview/prompt.md` first.
 
